@@ -1,6 +1,5 @@
 import requests
 import concurrent.futures
-from pprint import pprint
 
 
 WEBSITES = {'url':'https://sm.ms',
@@ -18,10 +17,10 @@ def uploadImage(path):
 
 
 # ThreadPool
-def uploadImages(paths):
+def uploadImages(paths, workers=4):
     results = {}
     errors = {}
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
         future_to_path = {executor.submit(uploadImage, path) : path for path in paths}
         for future in concurrent.futures.as_completed(future_to_path):
             path = future_to_path[future]
@@ -35,6 +34,7 @@ def uploadImages(paths):
 
 
 if __name__ == '__main__':
+    from pprint import pprint
     test = uploadImages([r'pics/1.jpg', r'pics/2.png', r'pics/3.png', r'pics/4.jpg', r'pics/5.jpg', r'pics/6.jpg'])
     pprint(test['results'])
     pprint(test['errors'])
