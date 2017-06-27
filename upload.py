@@ -8,8 +8,6 @@ WEBSITES = {'url':'https://sm.ms',
             'api':'https://sm.ms/api/upload',
             'params':{'ssl':True, 'format':'json'},
             'files':'smfile'}
-results = {}
-errors = {}
 
 
 def uploadImage(path):
@@ -21,6 +19,8 @@ def uploadImage(path):
 
 # ThreadPool
 def uploadImages(paths):
+    results = {}
+    errors = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
         future_to_path = {executor.submit(uploadImage, path) : path for path in paths}
         for future in concurrent.futures.as_completed(future_to_path):
@@ -31,9 +31,10 @@ def uploadImages(paths):
             except Exception as exc:
                 errors[path] = str(exc)
                 print('[ERROR]%s : %s'%(path, exc))
+    return {'results':results, 'errors':errors}
 
 
 if __name__ == '__main__':
-    uploadImages([r'pics/1.jpg', r'pics/2.png', r'pics/3.png', r'pics/4.jpg', r'pics/5.jpg', r'pics/6.jpg'])
-    pprint(results)
-    pprint(errors)
+    test = uploadImages([r'pics/1.jpg', r'pics/2.png', r'pics/3.png', r'pics/4.jpg', r'pics/5.jpg', r'pics/6.jpg'])
+    pprint(test['results'])
+    pprint(test['errors'])
