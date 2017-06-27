@@ -1,4 +1,3 @@
-import asyncio
 import requests
 import concurrent.futures
 from pprint import pprint
@@ -32,14 +31,9 @@ def uploadImages(paths):
             except Exception as exc:
                 errors[path] = str(exc)
                 print('[ERROR]%s : %s'%(path, exc))
-    #return results
 
 
 if __name__ == '__main__':
-    #a = uploadImage('1.jpg')
-    #pprint(a)
-    uploadImages([r'1.jpg', r'2.png', r'3.png', r'4.jpg', r'5.jpg', r'6.jpg'])
+    uploadImages([r'pics/1.jpg', r'pics/2.png', r'pics/3.png', r'pics/4.jpg', r'pics/5.jpg', r'pics/6.jpg'])
     pprint(results)
     pprint(errors)
-
-    
